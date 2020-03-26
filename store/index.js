@@ -9,7 +9,6 @@ export const state = () => ({
 export const actions = {
 
   async thesauruses(context) {
-    console.log("1: ")
     try {
       let response = await this.$axios.$get('http://api.loldev.ru/api/users/thesauruses')
       context.commit('setItems', response)
@@ -66,7 +65,7 @@ export const mutations = {
 }
 
 export const getters = {
-  users(state) {
+  allUsers(state) {
     return state.users
   }
 }

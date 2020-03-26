@@ -3,21 +3,25 @@
     <h1>Users List</h1>
 
     <div>
-      <div v-if="users == ''">Пусто</div>
-      <ul v-else v-for="user in users" :key="user">
-        <li> {{ user }} </li>
+      <ul v-if="users">
+        <li v-for="user in allUsers" :key="user.id">
+          <p>{{ allUsers }}</p>
+        </li>
       </ul>
+
+      <p v-else>Пусто</p>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapState, mapGetters } from 'vuex'
   import UsersList from "../components/usersList"
 
   export default {
     computed: {
-      ...mapState(['users'])
+      ...mapState(['users']),
+      ...mapGetters(['allUsers']),
     },
     methods: {
       ...mapActions([
