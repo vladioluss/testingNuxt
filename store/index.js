@@ -66,6 +66,6 @@ export const mutations = {
 
 export const getters = {
   allUsers(state) {
-    return state.users
+    return state.users.data
   }
 }
