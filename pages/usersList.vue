@@ -48,9 +48,11 @@
   import UsersList from "../components/usersList"
 
   export default {
-    data: {
-      selected: false,
-      allSelected: false,
+    data() {
+      return {
+        selected: false,
+        allSelected: false,
+      }
     },
 
     methods: {
@@ -78,7 +80,7 @@
       },
 
       selectAll: () => {
-        console.log("select: ", this.allSelected)
+        console.log("all select: ", this.allSelected)
       },
 
       select: () => {
