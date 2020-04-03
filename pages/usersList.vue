@@ -23,7 +23,7 @@
               </thead>
               <tbody>
                 <tr v-for="user in allUsers" :key="user.id">
-                  <td><input type="checkbox" v-model="selected" v-on:click="select()"></td>
+                  <td><input type="checkbox" v-model="selected" v-on:click="select"></td>
                   <td>{{ user.id }}</td>
                   <td>{{ user.username }}</td>
                   <td>{{ user.fullName }}</td>
@@ -50,7 +50,7 @@
   export default {
     data: {
       selected: false,
-      // allSelected: false,
+      allSelected: false,
     },
 
     methods: {
@@ -77,9 +77,9 @@
         //this.downloadCSV(result, 'export.csv', 'text/csv;charset=UTF-8;');
       },
 
-      /*selectAll: () => {
-
-      },*/
+      selectAll: () => {
+        console.log("select: ", this.allSelected)
+      },
 
       select: () => {
         console.log("select: ", this.selected)
