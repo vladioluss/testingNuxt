@@ -1,56 +1,58 @@
 <template>
-  <div class="container">
+  <div class="body">
     <h1>Users List</h1>
 
-    <button v-on:click="objToCsv">csv</button>
+    <button v-on:click="downloadCSV">csv</button>
     <br><br>
 
+    <center>
     <div>
       <div v-if="users">
         <div>
-            <table id="data-table">
-              <thead>
-              <tr>
-                <td><input type="checkbox" v-on:click="selectAll" v-model="allSelected"></td>
-                <td>id</td>
-                <td>User Name</td>
-                <td>Полное Имя</td>
-                <td>Дата рождения</td>
-                <td>Статус</td>
-                <td>Пол</td>
-                <td>Компания</td>
+          <table>
+            <thead>
+            <tr>
+              <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
+              <td>id</td>
+              <td>User Name</td>
+              <td>Полное Имя</td>
+              <td>Дата рождения</td>
+              <td>Статус</td>
+              <td>Пол</td>
+              <td>Компания</td>
+            </tr>
+            </thead>
+            <tbody>
+              <tr v-for="user in allUsers" :key="user.id">
+                <td><input type="checkbox" v-on:click="select(user)"></td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.fullName }}</td>
+                <td>{{ user.dateBirth }}</td>
+                <td>{{ items.statuses[user.status] }}</td>
+                <td>{{ items.sex[user.sex] }}</td>
+                <td>{{ items.companies[user.companyId] }}</td>
               </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in allUsers" :key="user.id">
-                  <td><input type="checkbox" v-model="selected" v-on:click="select"></td>
-                  <td>{{ user.id }}</td>
-                  <td>{{ user.username }}</td>
-                  <td>{{ user.fullName }}</td>
-                  <td>{{ user.dateBirth }}</td>
-                  <td>{{ items.statuses[user.status] }}</td>
-                  <td>{{ items.sex[user.sex] }}</td>
-                  <td>{{ items.companies[user.companyId] }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
+      </div>
 
       <p v-else>Пусто</p>
 
-    </div>
+    </div></center>
   </div>
+
 </template>
 
 <script>
   import { mapActions, mapState, mapGetters } from 'vuex'
   import UsersList from "../components/usersList"
+  import {getters} from "../store";
 
   export default {
     data() {
       return {
-        selected: false,
         allSelected: false,
       }
     },
@@ -60,8 +62,7 @@
         'usersList', 'thesauruses'
       ]),
 
-      objToCsv: (data) => {
-        //формирование csv
+      selectAll: (data) => {
         let rows = []
 
         let headers = Object.keys(data[0])
@@ -76,30 +77,29 @@
 
         let result = rows.join("\n")
         console.log(result)
-        //this.downloadCSV(result, 'export.csv', 'text/csv;charset=UTF-8;');
+        this.downloadCSV(result, 'export.csv', 'text/csv;charset=UTF-8;')
       },
 
-      selectAll: () => {
-        console.log("all select: ", this.allSelected)
+      select: (user) => {
+        let rows = []
+        rows.push(user)
+        console.log(rows)
+        this.downloadCSV(rows, 'export.csv', 'text/csv;charset=UTF-8;')
       },
 
-      select: () => {
-        console.log("select: ", this.selected)
-      },
-
-      downloadCSV: (data, fileName) => {
-        let link = document.createElement('a');
+      downloadCSV: (data, filename) => {
+        let link = document.createElement('a')
 
         if (URL && 'download' in link) {
           link.href = URL.createObjectURL(new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]),
             data
-          ]));
+          ]))
 
-          link.setAttribute('download', fileName);
+          link.setAttribute('download', filename)
 
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
         }
       }
     },
@@ -120,34 +120,39 @@
   }
 </script>
 
-<style scoped>
-  .container {
-    max-width: 1170px;
-    margin-left: auto;
-    margin-right: auto;
-    height: 1000px;
+<style scoped lang="scss">
+  .body {
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
   }
 
   h1 {
-    margin-bottom: 20px;
-  }
-
-  thead {
-    font-weight: bold;
+    color: white;
   }
 
   table {
     border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
   }
 
-  td, th {
-    border: 1px solid #999;
-    padding: 0.5rem;
-    text-align: left;
+  th,
+  td {
+    padding: 15px;
+    background-color: rgba(255,255,255,0.2);
+    color: #fff;
   }
 
-  tr:hover {
-    background: rgba(225, 233, 245, 0.6);
-    cursor: pointer;
+  thead {
+    th {
+      background-color: #55608f;
+    }
+  }
+
+  tbody {
+    tr {
+      &:hover {
+         background-color: rgba(255,255,255,0.3);
+      }
+    }
   }
 </style>
