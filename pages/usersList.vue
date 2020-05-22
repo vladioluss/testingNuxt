@@ -11,7 +11,7 @@
         <div>
           <table>
             <thead>
-            <tr>
+            <tr class="header">
               <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
               <td>id</td>
               <td>User Name</td>
@@ -77,14 +77,14 @@
 
         let result = rows.join("\n")
         console.log(result)
-        this.downloadCSV(result, 'export.csv', 'text/csv;charset=UTF-8;')
+        this.downloadCSV(result, 'all.csv', 'text/csv;charset=UTF-8;')
       },
 
       select: (user) => {
         let rows = []
         rows.push(user)
         console.log(rows)
-        this.downloadCSV(rows, 'export.csv', 'text/csv;charset=UTF-8;')
+        this.downloadCSV(rows, 'one.csv', 'text/csv;charset=UTF-8;')
       },
 
       downloadCSV: (data, filename) => {
@@ -154,5 +154,9 @@
          background-color: rgba(255,255,255,0.3);
       }
     }
+  }
+
+  .header {
+    font-weight: bold;
   }
 </style>
