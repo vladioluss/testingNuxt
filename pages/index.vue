@@ -53,7 +53,7 @@ export default {
   }),
 
 	methods: {
-		selectedAll() {
+		selectedAll: function() {
       //this.selected = []
 			if (!this.selectAll) {
         let headers = Object.keys(this.users[0])
@@ -69,13 +69,19 @@ export default {
         //this.download(result, 'export.csv')
       }
     },
-    select(user) {
+    select: function(user) {
       let rows = []
+
+      /*let headers = Object.keys(this.users[0])
+      rows.push(headers.join(";"))*/
+
       rows.push(user)
-      //this.download(rows)
+      let result = rows.join("\n")
+
       console.log(rows)
+      //this.download(result)
     },
-    download(data, filename) {
+    download: function (data, filename) {
       let link = document.createElement('a')
       if (URL && 'download' in link) {
         link.href = URL.createObjectURL(new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]),

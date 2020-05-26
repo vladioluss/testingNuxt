@@ -12,7 +12,7 @@
           <table>
             <thead>
             <tr class="header">
-              <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
+              <td><input type="checkbox" v-model="allSelected" v-on:click="selectAll(allUsers)"></td>
               <td>id</td>
               <td>User Name</td>
               <td>Полное Имя</td>
@@ -53,7 +53,7 @@
   export default {
     data() {
       return {
-        allSelected: false,
+        allSelected: false
       }
     },
 
@@ -62,32 +62,7 @@
         'usersList', 'thesauruses'
       ]),
 
-      selectAll: (data) => {
-        let rows = []
-
-        let headers = Object.keys(data[0])
-        rows.push(headers.join(";"))
-
-        for (let user of data) {
-          const values = headers.map(header => {
-            return user[header]
-          })
-          rows.push(values.join(";"))
-        }
-
-        let result = rows.join("\n")
-        console.log(result)
-        this.downloadCSV(result, 'all.csv', 'text/csv;charset=UTF-8;')
-      },
-
-      select: (user) => {
-        let rows = []
-        rows.push(user)
-        console.log(rows)
-        this.downloadCSV(rows, 'one.csv', 'text/csv;charset=UTF-8;')
-      },
-
-      downloadCSV: (data, filename) => {
+      downloadCSV: function (data, filename) {
         let link = document.createElement('a')
 
         if (URL && 'download' in link) {
@@ -101,7 +76,52 @@
           link.click()
           document.body.removeChild(link)
         }
-      }
+      },
+
+      selectAll: function (data) {
+        let rows = []
+
+        let headers = Object.keys(data[0])
+        rows.push(headers.join(";"))
+
+        for (let user of data) {
+          let values = headers.map(header => {
+            return user[header]
+          })
+          rows.push(values.join(";"))
+        }
+
+        let result = rows.join("\n")
+        console.log(result)
+        this.downloadCSV(result, 'all.csv', 'text/csv;charset=UTF-8;')
+      },
+
+      select: function (user) {
+        let rows = []
+        let header = Object.keys(user).join(';')
+        let value = Object.values(user).join(";")
+
+        rows.push(header, value)
+        let result = rows.join('\n')
+
+        console.log(result)
+        this.downloadCSV(result, 'one.csv', 'text/csv;charset=UTF-8;')
+      },
+
+      /*exportTableToCSV: () => {
+        const csv = []
+        const rows = document.querySelectorAll("table tr")
+
+        for (let i = 0; i < rows.length; i++) {
+          const row = [], cols = rows[i].querySelectorAll("td, th")
+
+          for (let j = 0; j < cols.length; j++)
+            row.push(cols[j].innerText)
+
+          csv.push(row.join(","))
+        }
+        console.log("res: ", csv)
+      }*/
     },
 
     computed: {
