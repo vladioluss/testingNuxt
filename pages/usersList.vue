@@ -12,7 +12,7 @@
           <table>
             <thead>
             <tr class="header">
-              <td><input type="checkbox" v-model="allSelected" v-on:click="selectAll(allUsers)"></td>
+              <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
               <td>id</td>
               <td>User Name</td>
               <td>Полное Имя</td>
@@ -36,6 +36,8 @@
             </tbody>
           </table>
         </div>
+        <br>
+        <pagination/>
       </div>
 
       <p v-else>Пусто</p>
@@ -48,7 +50,8 @@
 <script>
   import { mapActions, mapState, mapGetters } from 'vuex'
   import UsersList from "../components/usersList"
-  import {getters} from "../store";
+  import {getters} from "../store"
+  import pagination from "../components/pagination"
 
   export default {
     data() {
@@ -61,22 +64,6 @@
       ...mapActions([
         'usersList', 'thesauruses'
       ]),
-
-      downloadCSV: function (data, filename) {
-        let link = document.createElement('a')
-
-        if (URL && 'download' in link) {
-          link.href = URL.createObjectURL(new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]),
-            data
-          ]))
-
-          link.setAttribute('download', filename)
-
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-        }
-      },
 
       selectAll: function (data) {
         let rows = []
@@ -105,23 +92,25 @@
         let result = rows.join('\n')
 
         console.log(result)
-        this.downloadCSV(result, 'one.csv', 'text/csv;charset=UTF-8;')
+        this.downloadCSV(result, 'one.csv')
       },
 
-      /*exportTableToCSV: () => {
-        const csv = []
-        const rows = document.querySelectorAll("table tr")
+      downloadCSV: function (data, filename) {
+        let link = document.createElement('a')
 
-        for (let i = 0; i < rows.length; i++) {
-          const row = [], cols = rows[i].querySelectorAll("td, th")
+        if (URL && 'download' in link) {
+          link.href = URL.createObjectURL(new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]),
+            data
+          ]))
 
-          for (let j = 0; j < cols.length; j++)
-            row.push(cols[j].innerText)
+          link.setAttribute('download', filename)
 
-          csv.push(row.join(","))
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
         }
-        console.log("res: ", csv)
-      }*/
+      },
+
     },
 
     computed: {
@@ -135,6 +124,7 @@
     },
 
     components: {
+      pagination,
       UsersList
     }
   }
