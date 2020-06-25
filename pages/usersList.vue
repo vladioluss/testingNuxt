@@ -6,43 +6,44 @@
     <br><br>
 
     <center>
-    <div>
-      <div v-if="users">
-        <div>
-          <table>
-            <thead>
-            <tr class="header">
-              <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
-              <td>id</td>
-              <td>User Name</td>
-              <td>Полное Имя</td>
-              <td>Дата рождения</td>
-              <td>Статус</td>
-              <td>Пол</td>
-              <td>Компания</td>
-            </tr>
-            </thead>
-            <tbody>
-              <tr v-for="user in allUsers" :key="user.id">
-                <td><input type="checkbox" v-on:click="select(user)"></td>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.fullName }}</td>
-                <td>{{ user.dateBirth }}</td>
-                <td>{{ items.statuses[user.status] }}</td>
-                <td>{{ items.sex[user.sex] }}</td>
-                <td>{{ items.companies[user.companyId] }}</td>
+      <div>
+        <div v-if="users">
+          <div>
+            <table>
+              <thead>
+              <tr class="header">
+                <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
+                <td>id</td>
+                <td>User Name</td>
+                <td>Полное Имя</td>
+                <td>Дата рождения</td>
+                <td>Статус</td>
+                <td>Пол</td>
+                <td>Компания</td>
               </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <tr v-for="user in allUsers" :key="user.id">
+                  <td><input type="checkbox" v-on:click="select(user)"></td>
+                  <td>{{ user.id }}</td>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.fullName }}</td>
+                  <td>{{ user.dateBirth }}</td>
+                  <td>{{ items.statuses[user.status] }}</td>
+                  <td>{{ items.sex[user.sex] }}</td>
+                  <td>{{ items.companies[user.companyId] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <pagination/>
         </div>
-        <br>
-        <pagination/>
+
+        <p v-else>Пусто</p>
+
       </div>
-
-      <p v-else>Пусто</p>
-
-    </div></center>
+    </center>
   </div>
 
 </template>
@@ -80,19 +81,19 @@
 
         let result = rows.join("\n")
         console.log(result)
-        this.downloadCSV(result, 'all.csv', 'text/csv;charset=UTF-8;')
+        //this.downloadCSV(result, 'all.csv')
       },
 
       select: function (user) {
         let rows = []
         let header = Object.keys(user).join(';')
-        let value = Object.values(user).join(";")
+        let value = Object.values(user).join(';')
 
         rows.push(header, value)
         let result = rows.join('\n')
 
         console.log(result)
-        this.downloadCSV(result, 'one.csv')
+        //this.downloadCSV(result, 'one.csv')
       },
 
       downloadCSV: function (data, filename) {
