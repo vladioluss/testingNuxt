@@ -74,6 +74,11 @@
 
         for (let user of data) {
           let values = headers.map(header => {
+            if (user.status && user.sex && user.companyId) {
+              user.status = items.statuses[user.status]
+              console.log("TEST: ", user.status)
+            }
+
             return user[header]
           })
           rows.push(values.join(";"))

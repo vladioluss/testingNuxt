@@ -13,7 +13,7 @@ export const actions = {
       let response = await this.$axios.$get('http://api.loldev.ru/api/users/thesauruses')
       context.commit('setItems', response)
     } catch (e) {
-      console.log('error:', e)
+      console.log('error: ', e)
     }
   },
 
@@ -22,7 +22,7 @@ export const actions = {
       let response = await this.$axios.$get('http://api.loldev.ru/api/users/list')
       context.commit('users', response)
     } catch (e) {
-      console.log('error:', e)
+      console.log('error: ', e)
     }
   },
 }
@@ -46,9 +46,7 @@ export const mutations = {
 
   users(state, data) {
     let indexSex, indexStatus, IndexCompanies
-
     state.users = data // все объекты
-
     //перебор значений в массиве users
     //в переменные index* записываю индексы полей
     for (let value of data) {
@@ -57,7 +55,7 @@ export const mutations = {
       indexStatus = data[value].statuses
       IndexCompanies = data[value].companies
 
-      data[value].sex = state.sex[indexSex]
+      data[value].sex = data.sex[indexSex]
       data[value].statuses = data.statuses[indexStatus]
       data[value].companies = data.companies[IndexCompanies]
     }
