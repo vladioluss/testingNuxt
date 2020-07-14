@@ -12,7 +12,7 @@
             <table>
               <thead>
               <tr class="header">
-                <td><input type="checkbox" v-on:click="selectAll(allUsers)"></td>
+                <td><input type="checkbox" v-on:click="selectAll(allUsers)" v-model="allSelected"></td>
                 <td>id</td>
                 <td>User Name</td>
                 <td>Полное Имя</td>
@@ -57,7 +57,9 @@
   export default {
     data() {
       return {
-        allSelected: false
+        allSelected: false,
+        oneSelected: false,
+        selectedUsers: []
       }
     },
 
@@ -67,26 +69,38 @@
       ]),
 
       selectAll: function (data) {
-        let rows = []
+        if (!this.allSelected === true) {
+          //this.oneSelected == true
 
-        let headers = Object.keys(data[0])
-        rows.push(headers.join(";"))
+          let rows = []
 
-        for (let user of data) {
-          let values = headers.map(header => {
-            if (user.status && user.sex && user.companyId) {
-              user.status = items.statuses[user.status]
-              console.log("TEST: ", user.status)
-            }
+          let headers = Object.keys(data[0])
+          rows.push(headers.join(";"))
 
-            return user[header]
-          })
-          rows.push(values.join(";"))
+          for (let user of data) {
+            let values = headers.map(header => {
+
+              if (header === 'sex') {
+                return  this.items.sex[user.sex]
+              }
+
+              if (header === 'status') {
+                return this.items.statuses[user.status]
+              }
+
+              if (header === 'companyId') {
+                return  this.items.companies[user.companyId]
+              }
+
+              return user[header]
+            })
+            rows.push(values.join(";"))
+          }
+
+          let result = rows.join("\n")
+          console.log(result)
+          //this.downloadCSV(result, 'all.csv')
         }
-
-        let result = rows.join("\n")
-        console.log(result)
-        //this.downloadCSV(result, 'all.csv')
       },
 
       select: function (user) {
@@ -94,9 +108,23 @@
         let header = Object.keys(user).join(';')
         let value = Object.values(user).join(';')
 
+        if (user.companyId) {
+          return this.items.companies[user.companyId]
+          //console.log("test: " )
+        }
+
+        if (user.sex) {
+          return this.items.sex[user.sex]
+          //console.log("test: " )
+        }
+
+        if (user.status) {
+          return this.items.statuses[user.status]
+          //console.log("test: " )
+        }
+
         rows.push(header, value)
         let result = rows.join('\n')
-
         console.log(result)
         //this.downloadCSV(result, 'one.csv')
       },
