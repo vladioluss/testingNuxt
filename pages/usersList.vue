@@ -2,8 +2,7 @@
   <div class="body">
     <h1>Users List</h1>
 
-    <button v-on:click="downloadCSV">csv</button>
-    <br><br>
+    <button v-on:click="selectAll(allUsers)">Download CSV</button>
 
     <center>
       <div>
@@ -12,7 +11,7 @@
             <table>
               <thead>
               <tr class="header">
-                <td><input type="checkbox" v-on:click="selectAll(allUsers)" v-model="allSelected"></td>
+                <td><input type="checkbox" v-model="allSelected"></td>
                 <td>id</td>
                 <td>User Name</td>
                 <td>Полное Имя</td>
@@ -24,7 +23,7 @@
               </thead>
               <tbody>
                 <tr v-for="user in allUsers" :key="user.id">
-                  <td><input type="checkbox" v-on:click="select(user)"></td>
+                  <td><input type="checkbox" v-model="selectUser[user.id]"></td>
                   <td>{{ user.id }}</td>
                   <td>{{ user.username }}</td>
                   <td>{{ user.fullName }}</td>
@@ -32,6 +31,7 @@
                   <td>{{ items.statuses[user.status] }}</td>
                   <td>{{ items.sex[user.sex] }}</td>
                   <td>{{ items.companies[user.companyId] }}</td>
+<!--                  <td><input type="text" v-model="text[user.id]">{{text[user.id]}}</td>-->
                 </tr>
               </tbody>
             </table>
@@ -58,8 +58,7 @@
     data() {
       return {
         allSelected: false,
-        oneSelected: false,
-        selectedUsers: []
+        selectUser: {},
       }
     },
 
@@ -68,10 +67,30 @@
         'usersList', 'thesauruses'
       ]),
 
-      selectAll: function (data) {
-        if (!this.allSelected === true) {
-          //this.oneSelected == true
+      selectAll: function (inputData) {
+        var data = [...inputData]
 
+        if (this.allSelected === false) {
+          let rows = []
+          let headers = Object.keys(data[0])
+          rows.push(headers.join(";"))
+
+          //let sel = data.filter(rws => rws)
+          //console.log("a: ", a)
+
+          for (let user of this.selectUser) {
+            let values = headers.map(header => {
+              return user[header]
+            })
+            // console.log(sel)
+            rows.push(values.join(";"))
+          }
+
+          let result = rows.join("\n")
+
+          console.log(result)
+        }
+        else {
           let rows = []
 
           let headers = Object.keys(data[0])
@@ -79,7 +98,6 @@
 
           for (let user of data) {
             let values = headers.map(header => {
-
               if (header === 'sex') {
                 return  this.items.sex[user.sex]
               }
@@ -98,35 +116,9 @@
           }
 
           let result = rows.join("\n")
-          console.log(result)
-          //this.downloadCSV(result, 'all.csv')
+          //console.log(result)
+          this.downloadCSV(result, 'all.csv')
         }
-      },
-
-      select: function (user) {
-        let rows = []
-        let header = Object.keys(user).join(';')
-        let value = Object.values(user).join(';')
-
-        if (user.companyId) {
-          return this.items.companies[user.companyId]
-          //console.log("test: " )
-        }
-
-        if (user.sex) {
-          return this.items.sex[user.sex]
-          //console.log("test: " )
-        }
-
-        if (user.status) {
-          return this.items.statuses[user.status]
-          //console.log("test: " )
-        }
-
-        rows.push(header, value)
-        let result = rows.join('\n')
-        console.log(result)
-        //this.downloadCSV(result, 'one.csv')
       },
 
       downloadCSV: function (data, filename) {
@@ -168,9 +160,26 @@
   .body {
     background: linear-gradient(45deg, #49a09d, #5f2c82);
   }
+  button {
+    background-color: #6b2a6d;
+    cursor: pointer;
+    border: black 1px solid;
+    text-decoration: none;
+    outline: none;
+    color: white;
+    font-size: 18px;
+    padding: 12px 28px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
 
   h1 {
     color: white;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
   }
 
   table {
