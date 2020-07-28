@@ -20,7 +20,8 @@
         default: () => {
           return []
         }
-      }
+      },
+
     },
 
     data() {
@@ -44,7 +45,7 @@
 
     methods: {
       pageClick(page) {
-        this.currentPage = page
+      return this.currentPage = page
       },
     }
   }
