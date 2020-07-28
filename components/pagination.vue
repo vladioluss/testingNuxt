@@ -1,48 +1,70 @@
 <template>
-  <div class="pagination">
-    <a >&laquo;</a>
-    <a >1</a>
-    <a class="active">2</a>
-    <a >3</a>
-    <a >&raquo;</a>
+  <div>
+    <div
+      class="pagination"
+    >
+      <div v-for="page in pages"
+          :key="page"
+          @click="pageClick(page)">
+        {{ page }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
+    props: {
+      users_data: {
+        type: Array,
+        default: () => {
+          return []
+        }
+      }
+    },
+
     data() {
       return {
-        //
+        limit: 10,
+        currentPage: 1
+      }
+    },
+
+    computed: {
+      pages() {
+        return Math.ceil(this.users_data.length / this.limit)
+      },
+
+      paginatedUsers() {
+        let from = (this.currentPage - 1) * this.limit
+        let to = from + this.limit
+        return this.users_data.slice(from, to)
       }
     },
 
     methods: {
-
-
-
-
+      pageClick(page) {
+        this.currentPage = page
+      },
     }
   }
 </script>
 
 <style scoped>
   .pagination {
-    display: inline-block;
+    display: inline-flex;
+    cursor: pointer;
   }
 
-  .pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-
-  .pagination a.active {
+  .pagination div.active {
     background-color: #4CAF50;
     color: white;
   }
+  .pagination div {
+    padding: 15px;
+  }
 
-  .pagination a:hover:not(.active) {
+  .pagination div:hover:not(.active) {
     background-color: #ddd;
   }
 </style>

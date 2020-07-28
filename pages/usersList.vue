@@ -31,13 +31,12 @@
                   <td>{{ items.statuses[user.status] }}</td>
                   <td>{{ items.sex[user.sex] }}</td>
                   <td>{{ items.companies[user.companyId] }}</td>
-<!--                  <td><input type="text" v-model="text[user.id]">{{text[user.id]}}</td>-->
                 </tr>
               </tbody>
             </table>
           </div>
           <br>
-          <pagination/>
+          <pagination :users_data="allUsers"/>
         </div>
 
         <p v-else>Пусто</p>
@@ -55,6 +54,7 @@
   import pagination from "../components/pagination"
 
   export default {
+
     data() {
       return {
         allSelected: false,
@@ -75,16 +75,16 @@
           let headers = Object.keys(data[0])
           rows.push(headers.join(";"))
 
-          //let sel = data.filter(rws => rws)
-          //console.log("a: ", a)
+          let sel = data.filter(rws => console.log("rws: ", this.selectUser))
+          //console.log("a: ", sel)
 
-          for (let user of this.selectUser) {
+          /*for (let user of this.selectUser) {
             let values = headers.map(header => {
               return user[header]
             })
             // console.log(sel)
             rows.push(values.join(";"))
-          }
+          }*/
 
           let result = rows.join("\n")
 
