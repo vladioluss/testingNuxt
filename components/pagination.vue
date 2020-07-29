@@ -45,7 +45,7 @@
 
     methods: {
       pageClick(page) {
-      return this.currentPage = page
+        return this.currentPage = page
       },
     }
   }

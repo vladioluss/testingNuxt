@@ -75,8 +75,8 @@
           let headers = Object.keys(data[0])
           rows.push(headers.join(";"))
 
-          let sel = data.filter(rws => console.log("rws: ", this.selectUser))
-          //console.log("a: ", sel)
+          let sel = data.filter(rws => rws !== '')
+          console.log("a: ", sel)
 
           /*for (let user of this.selectUser) {
             let values = headers.map(header => {
